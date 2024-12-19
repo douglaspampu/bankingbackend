@@ -27,14 +27,12 @@ class AccountInput:
     def getAccount(self, accountId:int):
         acc = Accounts.objects.get(pk=accountId)
 
-        if acc.type == 'AccountTypes.STANDARD':
+        if acc.type == AccountTypes.STANDARD.value:
             return StandardAccount(acc)
-        elif acc.type == 'AccountTypes.GOLD':
+        elif acc.type == AccountTypes.GOLD.value:
             return GoldAccount(acc)
-        elif acc.type == 'AccountTypes.PLATINIUM':
+        elif acc.type == AccountTypes.PLATINIUM.value:
             return PlatinumAccount(acc) 
-
-
 
 
 class Account:
@@ -63,17 +61,18 @@ class Account:
 
     @transaction.atomic
     def MakeTransaction(self, transaction_data:Transaction):
-        origin_account = Accounts.objects.get(pk=self.accountData.pk)
+        if not self.accountData:
+            raise ValueError('Origin account is not defined')
         destin_account = Accounts.objects.get(pk=transaction_data.destinAccount)
 
-        if self.ValidateTransaction(origin_account, transaction_data.value):
-            origin_account.balance -= transaction_data.value
+        if self.ValidateTransaction(self.accountData, transaction_data.value):
+            self.accountData.balance -= transaction_data.value
             destin_account.balance += transaction_data.value
 
-            origin_account.save()
+            self.accountData.save()
             destin_account.save()
 
-        return origin_account
+        return self.accountData
 
 
 class StandardAccount(Account):

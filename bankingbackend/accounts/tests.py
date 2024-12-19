@@ -59,7 +59,7 @@ class TransactionTest(TestCase):
         
 
     def test_standardTransfer(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD, balance=1000, limit=0)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD.value, balance=1000, limit=0)
 
         originStdAcc = StandardAccount(originAccount)
 
@@ -77,7 +77,7 @@ class TransactionTest(TestCase):
         self.assertEqual(newDestinAcc.balance, originalDestinBalance + transaction.value)
 
     def test_StandardTransferNoLimit(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD, balance=10, limit=0)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD.value, balance=10, limit=0)
 
         originStdAcc = StandardAccount(originAccount)
 
@@ -95,7 +95,7 @@ class TransactionTest(TestCase):
         self.assertEqual(newDestinAcc.balance, originalDestinBalance)
 
     def test_StandardTransferUsingLimit(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD, balance=10, limit=100)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD.value, balance=10, limit=100)
 
         originStdAcc = StandardAccount(originAccount)
 
@@ -125,7 +125,7 @@ class TransactionPlatinumTest(TestCase):
         self.destinAccount = destinAcc.CreateAccount(destinAccount, self.destinClient)
 
     def test_transferWithCashBack(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.PLATINIUM, balance=1000, limit=100)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.PLATINIUM.value, balance=1000, limit=100)
 
         originPlaAcc = PlatinumAccount(originAccount)
 
@@ -156,7 +156,7 @@ class AccountsViewsTest(TestCase):
         self.destinAccount = destinAcc.CreateAccount(destinAccount, self.destinClient)
 
     def test_ViewsMakeTransfer_StdAcc(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD, balance=100, limit=0)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.STANDARD.value, balance=100, limit=0)
 
         transaction = Transaction()
         transaction.destinAccount = self.destinAccount.pk
@@ -167,7 +167,7 @@ class AccountsViewsTest(TestCase):
         self.assertEqual(updAcc.balance, 0)
 
     def test_ViewsMakeTransfer_GoldAcc(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.GOLD, balance=100, limit=0)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.GOLD.value, balance=100, limit=0)
 
         transaction = Transaction()
         transaction.destinAccount = self.destinAccount.pk
@@ -178,7 +178,7 @@ class AccountsViewsTest(TestCase):
         self.assertEqual(updAcc.balance, 0)
 
     def test_ViewsMakeTransfer_PlaAcc(self):
-        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.PLATINIUM, balance=100, limit=0)
+        originAccount = Accounts.objects.create(client=self.originClient, type=AccountTypes.PLATINIUM.value, balance=100, limit=0)
 
         transaction = Transaction()
         transaction.destinAccount = self.destinAccount.pk
